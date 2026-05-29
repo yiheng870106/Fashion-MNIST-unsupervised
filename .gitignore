@@ -1,0 +1,12 @@
+processed/
+data/
+checkpoints/
+.ipynb_checkpoints/
+__pycache__/
+*.pyc
+*.pt
+*.pth
+*.mat
+*.npy
+.DS_Store
+notebooks/documentation_and_github.ipynb
