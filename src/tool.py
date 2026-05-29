@@ -18,35 +18,32 @@ def Hungarian_matching(y, y_pred):
 
 def k_mean_classify(pca_list, X, y, FIG_DIR):
   results = []
-  for name, pca in pca_list:
+  for name, n_components in pca_list:
     start = time()
-    if pca == None:
+    if n_components is None:
       X_pca = X
     else:
-      X_pca = pca.fit_transform(X)
+      X_pca = PCA(n_components=n_components, random_state=42).fit_transform(X)
     kmeans = KMeans(n_clusters=10, random_state=42).fit(X_pca)
     end = time()
 
-    y_pred = kmeans.labels_
-    inertia = kmeans.inertia_
-    y_pred = Hungarian_matching(y, y_pred)
-    accuracy = accuracy_score(y, y_pred)
-    ari = adjusted_rand_score(y, y_pred)
-    nmi = normalized_mutual_info_score(y, y_pred)
+    y_pred_raw = kmeans.labels_
+    y_pred = Hungarian_matching(y, y_pred_raw)
 
     results.append(
         {
-            "name": name,
-            "accuracy": accuracy,
-            "ari": ari,
-            "nmi": nmi,
-            "inertia": inertia,
+            "method": "K-means",
+            "representation": name,
+            "accuracy": accuracy_score(y, y_pred),
+            "ari": adjusted_rand_score(y, y_pred_raw),
+            "nmi": normalized_mutual_info_score(y, y_pred_raw),
+            "inertia": kmeans.inertia_,
             "time": end - start
         }
     )
 
-    ConfusionMatrixDisplay.from_predictions(y, y_pred)
-    plt.title(f"{name} Confusion Matrix")
+    ConfusionMatrixDisplay.from_predictions(y, y_pred, normalize="true", values_format=".2f")
+    plt.title(f"{name} Confusion Matrix (K-means)")
     plt.savefig(FIG_DIR / f"{name}_cm.png")
     plt.show()
 
@@ -65,33 +62,31 @@ def k_mean_classify(pca_list, X, y, FIG_DIR):
 
 def spectral_clustering(pca_list, X, y, FIG_DIR):
   results = []
-  for name, pca in pca_list:
+  for name, n_components in pca_list:
     start = time()
-    if pca == None:
+    if n_components is None:
       X_pca = X
     else:
-      X_pca = pca.fit_transform(X)
-    spectral = SpectralClustering(n_clusters=10, affinity="nearest_neighbors", assign_labels="kmeans", random_state=42).fit(X_pca)
+      X_pca = PCA(n_components=n_components, random_state=42).fit_transform(X)
+    spectral = SpectralClustering(n_clusters=10, affinity="nearest_neighbors", assign_labels="kmeans", random_state=42)
+    y_pred_raw = spectral.fit_predict(X_pca)
     end = time()
 
-    y_pred = spectral.fit_predict(X_pca)
-    y_pred = Hungarian_matching(y, y_pred)
-    accuracy = accuracy_score(y, y_pred)
-    ari = adjusted_rand_score(y, y_pred)
-    nmi = normalized_mutual_info_score(y, y_pred)
+    y_pred = Hungarian_matching(y, y_pred_raw)
 
     results.append(
         {
-            "name": name,
-            "accuracy": accuracy,
-            "ari": ari,
-            "nmi": nmi,
+            "method": "Spectral Clustering",
+            "representation": name,
+            "accuracy": accuracy_score(y, y_pred),
+            "ari": adjusted_rand_score(y, y_pred_raw),
+            "nmi": normalized_mutual_info_score(y, y_pred_raw),
             "inertia": None,
             "time": end - start
         }
     )
 
-    ConfusionMatrixDisplay.from_predictions(y, y_pred)
+    ConfusionMatrixDisplay.from_predictions(y, y_pred, normalize="true", values_format=".2f")
     plt.title(f"{name} Confusion Matrix (Spectral Clustering)")
     plt.savefig(FIG_DIR / f"{name}_cm.png")
     plt.show()
