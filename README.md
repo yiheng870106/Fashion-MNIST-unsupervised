@@ -17,19 +17,6 @@ Fashion-MNIST contains 70,000 grayscale images of clothing items, each represent
 
 Fashion-MNIST has 10 classes:
 
-| Label | Class       |
-| ----- | ----------- |
-| 0     | T-shirt/top |
-| 1     | Trouser     |
-| 2     | Pullover    |
-| 3     | Dress       |
-| 4     | Coat        |
-| 5     | Sandal      |
-| 6     | Shirt       |
-| 7     | Sneaker     |
-| 8     | Bag         |
-| 9     | Ankle boot  |
-
 <p align="center">
 <img src="figures/example_images.png" width="600">
 </p>
