@@ -131,8 +131,8 @@ The `figures/` directory contains confusion matrices and PCA-based cluster visua
 
 This project was developed in Google Colab. Run notebooks in order:
 
-    Setup.ipynb
-    Discovering Structure in Fashion-MNIST.ipynb
+    Setup.ipynb(https://colab.research.google.com/drive/11HkidF8XRZ7XfV7VGKowQcjcyPIoleRj?usp=drive_link)
+    Discovering Structure in Fashion-MNIST.ipynb(https://colab.research.google.com/drive/1Kj94H0uf8dmjgYN5eMT8IBLBK9RnpDuA?usp=drive_link)
 
 ## Author
 
